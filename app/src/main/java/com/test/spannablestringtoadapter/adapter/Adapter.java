@@ -14,8 +14,9 @@ import java.util.List;
  */
 
 public class Adapter extends BaseQuickAdapter<WordBean, BaseViewHolder> {
-    public Adapter(List<WordBean> data) {
-        super(R.layout.item_word, data);
+
+    public Adapter(int layoutResId, @Nullable List<WordBean> data) {
+        super(layoutResId, data);
     }
 
     @Override

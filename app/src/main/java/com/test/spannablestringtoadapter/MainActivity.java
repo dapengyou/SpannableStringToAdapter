@@ -38,9 +38,7 @@ public class MainActivity extends AppCompatActivity {
         mLlSearch = findViewById(R.id.ll_search);
         mRecyclerView = findViewById(R.id.rv_list);
 
-        mAdapter = new Adapter(new ArrayList<WordBean>());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initData() {
@@ -53,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
             wordBean.setWord(words[i]);
             mModels.add(wordBean);
         }
+        mAdapter = new Adapter(R.layout.item_word, mModels);
+
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initListener() {

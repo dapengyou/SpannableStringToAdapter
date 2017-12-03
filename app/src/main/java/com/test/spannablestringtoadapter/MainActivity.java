@@ -4,10 +4,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.test.spannablestringtoadapter.adapter.Adapter;
 import com.test.spannablestringtoadapter.bean.WordBean;
 
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private List<WordBean> mModels;
     private Adapter mAdapter;
     private RecyclerView mRecyclerView;
+    private SmartRefreshLayout mSmartRefreshLayout;
 
     private EditText mEtKey;
     private TextView mTvClear;
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mTvClear = findViewById(R.id.tv_clear);
         mLlSearch = findViewById(R.id.ll_search);
         mRecyclerView = findViewById(R.id.rv_list);
+        mSmartRefreshLayout = findViewById(R.id.srl_list);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -51,9 +55,11 @@ public class MainActivity extends AppCompatActivity {
             wordBean.setWord(words[i]);
             mModels.add(wordBean);
         }
-        mAdapter = new Adapter(R.layout.item_word, mModels);
 
+        mAdapter = new Adapter(R.layout.item_word, mModels);
         mRecyclerView.setAdapter(mAdapter);
+        View headview = LayoutInflater.from(this).inflate(R.layout.item_search_head, null);
+        mAdapter.addHeaderView(headview);
     }
 
     private void initListener() {
@@ -63,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 mEtKey.getText().clear();
             }
         });
+        mSmartRefreshLayout.setEnableRefresh(false);
     }
 
 

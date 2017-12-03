@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 mEtKey.getText().clear();
             }
         });
+        //屏蔽下拉刷新
         mSmartRefreshLayout.setEnableRefresh(false);
     }
 

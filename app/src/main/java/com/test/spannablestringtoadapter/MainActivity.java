@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText mEtKey;
     private TextView mTvClear;
     private View mLlSearch;
+
+    private static final int HIDE_THRESHOLD = 20;
+    private int scrolledDistance = 0;
+    private boolean controlsVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,39 @@ public class MainActivity extends AppCompatActivity {
         });
         //屏蔽下拉刷新
         mSmartRefreshLayout.setEnableRefresh(false);
+        //list滚动，加载消失显示动画
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {
+                    hideViews();
+                    controlsVisible = false;
+                    scrolledDistance = 0;
+                } else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
+                    showViews();
+                    controlsVisible = true;
+                    scrolledDistance = 0;
+                }
+                if ((controlsVisible && dy > 0) || (!controlsVisible && dy < 0)) {
+                    scrolledDistance += dy;
+                }
+            }
+        });
+    }
+
+    private void hideViews() {
+        mLlSearch.animate().translationY(-mLlSearch.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+    }
+
+    private void showViews() {
+        mLlSearch.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
     }
 
 
